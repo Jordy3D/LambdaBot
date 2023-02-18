@@ -89,6 +89,18 @@ def simple_embed(title="", description="", thumbnail="", color=0xFFFFFF, footer=
 command_prefix = disnake.ext.commands.when_mentioned
 owners = [298787867579383808, 324866584554242048]
 
+# check if secrets.py exists
+if not os.path.exists("secrets.py"):
+    log("secrets.py not found!", "ERROR")
+    exit()
+# check if secrets.token exists and secrets.xi exists
+if not hasattr(secrets, "token"):
+    log("secrets.token not found!", "ERROR")
+    exit()
+if not hasattr(secrets, "xi"):
+    log("secrets.xi not found!", "ERROR")
+    exit()
+
 start()
 
 # endregion
