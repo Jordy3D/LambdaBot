@@ -86,8 +86,11 @@ def simple_embed(title="", description="", thumbnail="", color=0xFFFFFF, footer=
 # endregion
 
 # region ===== Main =====
-command_prefix = disnake.ext.commands.when_mentioned
-owners = [298787867579383808, 324866584554242048]
+
+# if owners is not set in secrets.py, set it to an empty list
+owners = secrets.owners if hasattr(secrets, "owners") else []
+# if test_guilds is not set in secrets.py, set it to an empty list
+test_guilds = secrets.test_guilds if hasattr(secrets, "test_guilds") else []
 
 # check if secrets.py exists
 if not os.path.exists("secrets.py"):
@@ -106,7 +109,7 @@ start()
 # endregion
 
 # create bot and make it sync commands globally
-bot = commands.Bot(command_prefix=command_prefix, owner_ids = set(owners), sync_commands=True, test_guilds=[702078183146520576])
+bot = commands.Bot(command_prefix=disnake.ext.commands.when_mentioned, owner_ids = set(owners), sync_commands=True, test_guilds=test_guilds)
 
 # region ===== Commands and Events =====
 
@@ -185,15 +188,9 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
         # if an image URL is provided, save it to image/file_name.png
         if image != None:
             image_path = f"image/{file_name}.png"
-            # save the image
-            with open("temp.png", "wb") as f:
-                f.write(requests.get(image).content)
-
-                # command based on magick bean.jpg -gravity center -extent "%[fx:h<w?h:w]x%[fx:h<w?h:w]" result.jpg
-                command = f"magick temp.png -gravity center -extent \"%[fx:h<w?h:w]x%[fx:h<w?h:w]\" \"{image_path}\""
-                os.system(command)
-            # if the image is 0 bytes
-            if os.path.getsize(image_path) == 0:
+            image_content = requests.get(image).content
+            
+            if not DagothVideo.save_and_crop_image(image_content, image_path):
                 await interaction.edit_original_message(content="Image failed to download!")
                 return
         else:

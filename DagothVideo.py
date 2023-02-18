@@ -1,5 +1,21 @@
 import os
 
+
+def save_and_crop_image(image_content, image_path):
+    # save the image
+    with open("temp.png", "wb") as f:
+        f.write(image_content)
+
+    # command based on magick bean.jpg -gravity center -extent "%[fx:h<w?h:w]x%[fx:h<w?h:w]" result.jpg
+    command = f"magick temp.png -gravity center -extent \"%[fx:h<w?h:w]x%[fx:h<w?h:w]\" \"{image_path}\""
+    os.system(command)
+
+    # if the image is 0 bytes
+    if os.path.getsize(image_path) == 0:
+        return False
+    else:
+        return True
+
 def dagoth_video(audio_path, image_path, output_file, debug=False):
 
     # if image_path does not have quotes, add them
