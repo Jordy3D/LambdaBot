@@ -19,7 +19,12 @@ I'm funny.
 Python download: https://www.python.org/downloads/  
 With Python installed, you need to install [Disnake](https://docs.disnake.dev/en/stable/).  
 This can be done by running the following command in CMD/Powershell:  
-`pip install disnake`
+`pip install disnake`  
+You may also need to run the following:  
+`pip install requests`
+
+Optionally (untested), you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
+`pip install -r requirements.txt`
 
 ## Setup
 ### Discord
