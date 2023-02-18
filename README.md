@@ -41,7 +41,7 @@ xi = 'YOUR ELEVENLABS TOKEN HERE'
 
 ### Other Details
 Also in `secrets.py`, you should set up a `test_guilds` value and an `owners` value, each in arrays.  
-This is to try and get Slash Commands working, and to define who can generate video or have an uncapped audio generation limit.
+This is to try and get Slash Commands working, and to define who can generate video or have an uncapped audio generation limit.  
 After adding those, your file should look something like
 ```py
 token = 'YOUR DISCORD TOKEN THING HERE'
