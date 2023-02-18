@@ -17,7 +17,7 @@ def generate_file(output_name, folder_path, clip_count):
 
     # loop through all files in folder
     for clip in clips:
-        if clip.endswith(".wav"):
+        if clip.endswith(".wav") or clip.endswith(".ogg"):
             # add file to list
             clip_list.append(f"{folder_path}/{clip}")
 
@@ -45,4 +45,4 @@ def generate_file(output_name, folder_path, clip_count):
 # for the number of files to generate
 for i in range(file_count):
     # generate a file
-    generate_file(f"output{i + 1}", folder_path, clip_count)
+    generate_file(f"sample{i + 1}", folder_path, clip_count)
