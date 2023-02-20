@@ -26,7 +26,8 @@ You may also need to run the following:
 `pip install requests`
 
 Optionally, you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
-`pip install -r requirements.txt`
+`pip install -r requirements.txt`  
+or you can run `install.bat`, though this might not work.
 
 ## Setup
 ### Discord
