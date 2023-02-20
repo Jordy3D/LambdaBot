@@ -23,12 +23,12 @@ This can be done by running the following command in CMD/Powershell:
 You may also need to run the following:  
 `pip install requests`
 
-Optionally (untested), you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
+Optionally, you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
 `pip install -r requirements.txt`
 
 ## Setup
 ### Discord
-You will need to set up an Application on the [Discord Developer Portal](https://discord.com/developers/docs/intro). I won't explain that here.  
+You will need to set up an Application on the [Discord Developer Portal](https://discord.com/developers/). I won't explain that here.  
 
 ### Keys and Tokens
 You also need to create a `secrets.py` file next to `main.py`.  
@@ -54,3 +54,7 @@ owners = [USER ID HERE, USER ID HERE, USER ID HERE]
 ## Running
 Once everything is installed and set up properly, double-clicking `main.py` should work.  
 If it brings up a "no program to run this" message, you can Browse for Python from there and then say "always use this program".
+
+## Notes
+While the AI is pretty good, sometimes it can mispronounce things. Purposely using different words may become necessary to get the result you expect.
+For example, I found "colonel" couldn't be pronounced, so I used "kernel"
