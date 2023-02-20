@@ -30,8 +30,8 @@ This will install the Python packages needed for the bot to run, and will initia
 
 ### Keys and Tokens
 In that `secrets.py`, you will store two tokens:
-1. Your Discord application token
-1. Your API key for ElevenLabs (obtained on your Profile).  
+1. Your Discord application token - `token`
+1. Your API key for ElevenLabs (obtained on your Profile). - `xi`  
 
 ### Other Details
 The `secrets.py` file also stores `test_guilds` and `owners`, each in arrays.  
