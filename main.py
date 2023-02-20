@@ -85,7 +85,6 @@ def simple_embed(title="", description="", thumbnail="", color=0xFFFFFF, footer=
 
 # set sub tier 
 paid_user = BaneElevenLabs.get_user_data().tier != "free"
-generating = False
 
 # if owners is not set in secrets.py, set it to an empty list
 owners = secrets.owners if hasattr(secrets, "owners") else []
@@ -168,11 +167,11 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
         await interaction.response.send_message("Only special people can use this!", ephemeral=True)
         return
     
-    if generating == True:
-        await interaction.response.send_message("Currently busy, please try again later.", ephemeral=True)
-        return
+    # if generating == True:
+    #     await interaction.response.send_message("Currently busy, please try again later.", ephemeral=True)
+    #     return
     
-    generating = True
+    # generating = True
     await interaction.response.defer(with_message="Generating...")
 
     # if message doesn't end with a period, question mark, or exclamation point, add a period
@@ -218,8 +217,6 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
     else:
         await interaction.edit_original_message(content="Something went wrong!")
         log(f"Something went wrong for {interaction.author.name}!", "DAGOTH")
-
-    generating = False
 
 # endregion
 
