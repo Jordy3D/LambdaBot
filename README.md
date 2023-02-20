@@ -23,7 +23,7 @@ This can be done by running the following command in CMD/Powershell:
 You may also need to run the following:  
 `pip install requests`
 
-Optionally (untested), you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
+Optionally, you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
 `pip install -r requirements.txt`
 
 ## Setup
