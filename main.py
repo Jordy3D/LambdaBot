@@ -85,6 +85,7 @@ def simple_embed(title="", description="", thumbnail="", color=0xFFFFFF, footer=
 
 # set sub tier 
 paid_user = BaneElevenLabs.get_user_data().tier != "free"
+generating = False
 
 # if owners is not set in secrets.py, set it to an empty list
 owners = secrets.owners if hasattr(secrets, "owners") else []
@@ -136,7 +137,7 @@ async def on_message(message):
 
 # region AI Voice Generator
 dagoth_voices = BaneElevenLabs.get_voices(cloned=paid_user)
-generating = False
+
 # slash command to accept a message and send it to an API
 @bot.slash_command(name="dagoth",
                      description="Responds AI generated audio.",
