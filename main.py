@@ -137,9 +137,11 @@ async def on_message(message):
 # region AI Voice Generator
 dagoth_voices = BaneElevenLabs.get_voices(cloned=paid_user)
 
+generating = False
+
 # slash command to accept a message and send it to an API
 @bot.slash_command(name="dagoth",
-                     description="Responds AI generated audio.",
+                     description="Responds with AI generated audio.",
                         pass_context=True,
                         auto_sync=True)
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -147,6 +149,13 @@ dagoth_voices = BaneElevenLabs.get_voices(cloned=paid_user)
 async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: str = commands.Param(choices=dagoth_voices.keys()), stability: float = 0.75, similarity_boost: float = 0.75, image: str = None):
     # refresh the dagoth_voices dict
     dagoth_voices = BaneElevenLabs.get_voices(cloned=paid_user)
+
+    # get generating bool from global
+    global generating
+
+    if generating == True:
+        await interaction.response.send_message("Currently busy, please try again later.", ephemeral=True)
+        return
 
     # if message is too long, return
     if len(message) > 100:
@@ -166,12 +175,8 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
     elif interaction.author.id not in owners and message.startswith("!"):
         await interaction.response.send_message("Only special people can use this!", ephemeral=True)
         return
-    
-    # if generating == True:
-    #     await interaction.response.send_message("Currently busy, please try again later.", ephemeral=True)
-    #     return
-    
-    # generating = True
+      
+    generating = True
     await interaction.response.defer(with_message="Generating...")
 
     # if message doesn't end with a period, question mark, or exclamation point, add a period
@@ -217,6 +222,8 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
     else:
         await interaction.edit_original_message(content="Something went wrong!")
         log(f"Something went wrong for {interaction.author.name}!", "DAGOTH")
+
+    generating = False
 
 # endregion
 

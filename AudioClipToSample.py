@@ -21,19 +21,23 @@ def generate_file(output_name, folder_path, clip_count):
             # add file to list
             clip_list.append(f"{folder_path}/{clip}")
 
+    all = False
     # get 60 random files from list, with no duplicates
+    if len(clip_list) < clip_count:
+        all = True
+        clip_count = int(len(clip_list) / 4)
     random_clips = random.sample(clip_list, clip_count)
 
     concat_string = ""
 
     for clip in random_clips:
-        concat_string += f"-i {clip} -i s.wav -i s.wav "
+        concat_string += f"-i \"{clip}\" -i s.wav -i s.wav "
 
     filter_string = ""
     for i in range(file_count):
         filter_string += f"[{i}:0]"
 
-    filter_string += f"concat=n=60:v=0:a=1[out]"
+    filter_string += f"concat=n={clip_count}:v=0:a=1[out]"
 
 
     command = f"ffmpeg {concat_string} -filter_complex \"{filter_string}\" -map \"[out]\" -y {output_name}.wav"
@@ -41,6 +45,7 @@ def generate_file(output_name, folder_path, clip_count):
 
     # combine silence and random files, overwriting existing file
     os.system(command)
+
 
 # for the number of files to generate
 for i in range(file_count):
