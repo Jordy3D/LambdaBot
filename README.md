@@ -8,6 +8,7 @@ I'm funny.
   - By default only shows Cloned/Custom voices
   - Updates voice list upon running the generation
 - Generate still-frame video using generated audio and provided image URL
+  - Start your message with a ! to generate a video instead of audio
   - Dagoth Ur image included because that's likely something you'd want and/or need
 - Save all generations (images, audio, and video) locally, in case you wanna refer to them again or something
   
