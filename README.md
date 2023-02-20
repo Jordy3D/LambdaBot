@@ -28,7 +28,7 @@ Optionally (untested), you can run the following if you run CMD/Powershell from 
 
 ## Setup
 ### Discord
-You will need to set up an Application on the [Discord Developer Portal](https://discord.com/developers/docs/intro). I won't explain that here.  
+You will need to set up an Application on the [Discord Developer Portal](https://discord.com/developers/). I won't explain that here.  
 
 ### Keys and Tokens
 You also need to create a `secrets.py` file next to `main.py`.  
