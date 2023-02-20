@@ -5,33 +5,45 @@ import datetime
 import secrets # secrets.py stores the API key
 
 
+def __request(url=None, headers=None, response_data="json"):
+    if not url:
+        return None
+    
+    try:
+        response = requests.get(url, headers=headers)
+        
+        if response.status_code == 200:
+            if response_data == "json":
+                return response.json(), response.status_code
+            else:
+                return response, response.status_code
+        
+    except:
+        return None, 408
+        
+
 def get_voices(cloned=False):
     url = f"https://api.elevenlabs.io/v1/voices"
     headers = {
         "accept": "application/json",
         "xi-api-key": secrets.xi
     }
+    
+    data, status = __request(url, headers=headers)
+    
+    if data == None:
+        return f"Request error. Status code: {status}"
 
-    # send the request
-    response = requests.get(url, headers=headers)
-
-    # check if the request was successful
-    if response.status_code == 200:
-        # return a dict of {name: voice_id}
-        my_dict = {}
-        for voice in response.json()["voices"]:
-            if cloned:
-                if voice["category"] == "cloned":
-                    my_dict[voice["name"]] = voice["voice_id"]
-            else:
+    my_dict = {}
+    for voice in data["voices"]:
+        if cloned:
+            if voice["category"] == "cloned":
                 my_dict[voice["name"]] = voice["voice_id"]
-    
-        return my_dict
-    else:
-        # print the error
-        print(response.text)
-        return "Something went wrong!"
-    
+        else:
+            my_dict[voice["name"]] = voice["voice_id"]
+
+    return my_dict
+
     
 def generate_audio(voice, message, stability, similarity_boost, file_name="audio.mp3", debug=False):
 
@@ -123,25 +135,24 @@ def get_user_data():
         "xi-api-key": secrets.xi
     }
 
-    # send the request
-    response = requests.get(url, headers=headers)
-
-    # check if the request was successful
-    if response.status_code == 200:
-        # store the data in a User object
-        data = response.json()
-        try:
-            user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], data["next_invoice"]["amount_due_cents"], data["next_invoice"]["next_payment_attempt_unix"])
-            return user
-        except:
-            # if the above fails, it's because the user doesn't have a subscription
-            user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], None, None)
-            return user
-
+    data, status = __request(url, headers=headers)
+    
+    if data == None:
+        return f"Request error. Status code: {status}"
+    
+    try:
+        user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], data["next_invoice"]["amount_due_cents"], data["next_invoice"]["next_payment_attempt_unix"])
+    except:
+        # if the above fails, it's because the user doesn't have a subscription
+        user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], None, None)
+    
+    return user
 
 
 if __name__ == "__main__":
-    print(get_user_data())
-
-    # print(get_voices())
+    user_data = get_user_data()
+    print(user_data)
+    
+    # clone = user_data.tier != "free"
+    # print(get_voices(cloned=clone))
 

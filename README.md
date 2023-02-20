@@ -16,6 +16,8 @@ I'm funny.
 - [Custom wrapper](https://github.com/Jordy3D/LambdaBot/blob/main/BaneElevenLabs.py) for ElevenLabs' API included because ease of use is fun!
 
 ## Requirements
+An [ElevenLabs](https://beta.elevenlabs.io/) account  
+
 Python download: https://www.python.org/downloads/  
 With Python installed, you need to install [Disnake](https://docs.disnake.dev/en/stable/).  
 This can be done by running the following command in CMD/Powershell:  
