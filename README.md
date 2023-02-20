@@ -54,3 +54,7 @@ owners = [USER ID HERE, USER ID HERE, USER ID HERE]
 ## Running
 Once everything is installed and set up properly, double-clicking `main.py` should work.  
 If it brings up a "no program to run this" message, you can Browse for Python from there and then say "always use this program".
+
+## Notes
+While the AI is pretty good, sometimes it can mispronounce things. Purposely using different words may become necessary to get the result you expect.
+For example, I found "colonel" couldn't be pronounced, so I used "kernel"
