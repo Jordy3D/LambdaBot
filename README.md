@@ -16,48 +16,34 @@ I'm funny.
 - [Custom wrapper](https://github.com/Jordy3D/LambdaBot/blob/main/BaneElevenLabs.py) for ElevenLabs' API included because ease of use is fun!
 
 ## Requirements
-An [ElevenLabs](https://beta.elevenlabs.io/) account  
-
-Python download: https://www.python.org/downloads/  
-With Python installed, you need to install [Disnake](https://docs.disnake.dev/en/stable/).  
-This can be done by running the following command in CMD/Powershell:  
-`pip install disnake`  
-You may also need to run the following:  
-`pip install requests`
-
-Optionally, you can run the following if you run CMD/Powershell from the directory that `main.py` is in:  
-`pip install -r requirements.txt`  
-or you can run `install.bat`, though this might not work.
+1. An [ElevenLabs](https://beta.elevenlabs.io/) account  
+1. Python download: https://www.python.org/downloads/  
 
 ## Setup
 ### Discord
 You will need to set up an Application on the [Discord Developer Portal](https://discord.com/developers/). I won't explain that here.  
 
+### Files
+Run `install.bat`.  
+This will install the Python packages needed for the bot to run, and will initialise a `secrets.py` file for you to use.
+
 ### Keys and Tokens
-You also need to create a `secrets.py` file next to `main.py`.  
-In that file, you will store your Discord application token, and the API key for ElevenLabs (obtained on your Profile).  
-Your file at the end should look something like the following:
-```py
-token = 'YOUR DISCORD TOKEN THING HERE'
-xi = 'YOUR ELEVENLABS TOKEN HERE'
-```
+In that `secrets.py`, you will store two tokens:
+1. Your Discord application token
+1. Your API key for ElevenLabs (obtained on your Profile).  
 
 ### Other Details
-Also in `secrets.py`, you should set up a `test_guilds` value and an `owners` value, each in arrays.  
+The `secrets.py` file also stores `test_guilds` and `owners`, each in arrays.  
 This is to try and get Slash Commands working, and to define who can generate video or have an uncapped audio generation limit.  
-After adding those, your file should look something like
-```py
-token = 'YOUR DISCORD TOKEN THING HERE'
-xi = 'YOUR ELEVENLABS TOKEN HERE'
-
-test_guilds = [YOUR SERVER ID HERE]
-owners = [USER ID HERE, USER ID HERE, USER ID HERE]
-```
 
 ## Running
 Once everything is installed and set up properly, double-clicking `main.py` should work.  
 If it brings up a "no program to run this" message, you can Browse for Python from there and then say "always use this program".
 
 ## Notes
-While the AI is pretty good, sometimes it can mispronounce things. Purposely using different words may become necessary to get the result you expect.
-For example, I found "colonel" couldn't be pronounced, so I used "kernel"
+While the AI is pretty good, sometimes it can mispronounce things.  
+Purposely using different words may become necessary to get the result you expect.  
+I'll add to the following table with words I come across that you may want to try.
+| Original | Replacement |
+| :-- | :-- |
+| colonel | kernel|
