@@ -26,11 +26,7 @@ import BaneElevenLabs
 import DagothVideo
 
 # TODO:
-# Auto prune role >>>>> This will be left to Dyno
 
-# Add Test Guilds to Settings.JSON
-# Pretty up Module embed <<<<<
-# Automate Module embed
 
 
 # region General Functions
@@ -87,6 +83,9 @@ def simple_embed(title="", description="", thumbnail="", color=0xFFFFFF, footer=
 
 # region ===== Main =====
 
+# set sub tier 
+paid_user = BaneElevenLabs.get_user_data().tier != "free"
+
 # if owners is not set in secrets.py, set it to an empty list
 owners = secrets.owners if hasattr(secrets, "owners") else []
 # if test_guilds is not set in secrets.py, set it to an empty list
@@ -136,7 +135,8 @@ async def on_message(message):
 # region Slash Commands
 
 # region AI Voice Generator
-dagoth_voices = BaneElevenLabs.get_voices(cloned=True)
+dagoth_voices = BaneElevenLabs.get_voices(cloned=paid_user)
+generating = False
 # slash command to accept a message and send it to an API
 @bot.slash_command(name="dagoth",
                      description="Responds AI generated audio.",
@@ -146,14 +146,16 @@ dagoth_voices = BaneElevenLabs.get_voices(cloned=True)
 # add a field that only accepts the keys in the dagoth_voices dict
 async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: str = commands.Param(choices=dagoth_voices.keys()), stability: float = 0.75, similarity_boost: float = 0.75, image: str = None):
     # refresh the dagoth_voices dict
-    dagoth_voices = BaneElevenLabs.get_voices(cloned=True)
+    dagoth_voices = BaneElevenLabs.get_voices(cloned=paid_user)
 
     # if message is too long, return
     if len(message) > 100:
+        if len(message) > 2000:
+            await interaction.response.send_message("Message is too long!", ephemeral=True)
+            return
         # owners can bypass this
         if interaction.author.id not in owners:
             await interaction.response.send_message("Message is too long!", ephemeral=True)
-            print(f"Message is too long! ({len(message)}/100)\n {message}")
             return
 
     video = False
@@ -165,7 +167,12 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
         await interaction.response.send_message("Only special people can use this!", ephemeral=True)
         return
     
-    await interaction.response.defer(with_message="Generating audio...")
+    if generating == True:
+        await interaction.response.send_message("Currently busy, please try again later.", ephemeral=True)
+        return
+    
+    generating = True
+    await interaction.response.defer(with_message="Generating...")
 
     # if message doesn't end with a period, question mark, or exclamation point, add a period
     if message[-1] not in [".", "?", "!"]:
@@ -210,6 +217,8 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
     else:
         await interaction.edit_original_message(content="Something went wrong!")
         log(f"Something went wrong for {interaction.author.name}!", "DAGOTH")
+
+    generating = False
 
 # endregion
 

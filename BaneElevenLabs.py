@@ -31,8 +31,8 @@ def get_voices(cloned=False):
         # print the error
         print(response.text)
         return "Something went wrong!"
-
-
+    
+    
 def generate_audio(voice, message, stability, similarity_boost, file_name="audio.mp3", debug=False):
 
     if debug:
@@ -76,7 +76,7 @@ def generate_audio(voice, message, stability, similarity_boost, file_name="audio
 
 
 class User:
-    def __init__(self, tier, character_count, character_limit, can_extend, reset_unix, voice_limit, sub_cost, sub_renew_unix):
+    def __init__(self, tier, character_count, character_limit, can_extend, reset_unix, voice_limit, sub_cost=None, sub_renew_unix=None):
         self.tier = tier
         self.characters_used = f"{character_count}/{character_limit}"
         self.character_remaining = character_limit - character_count
@@ -89,11 +89,12 @@ class User:
         voices_used = len(get_voices(cloned=True))
         self.voices_used = f"{voices_used}/{voice_limit}"
         self.sub_cost = sub_cost
-        self.sub_renew_unix = sub_renew_unix
-        self.sub_renew_date = datetime.datetime.fromtimestamp(sub_renew_unix).strftime("%Y-%m-%d %H:%M:%S")
-        # time until sub renewal in the format DD:HH:MM:SS
-        until = datetime.datetime.fromtimestamp(sub_renew_unix) - datetime.datetime.now()
-        self.sub_time_remaining = str(until).split(".")[0]
+        if sub_cost is not None:
+            self.sub_renew_unix = sub_renew_unix
+            self.sub_renew_date = datetime.datetime.fromtimestamp(sub_renew_unix).strftime("%Y-%m-%d %H:%M:%S")
+            # time until sub renewal in the format DD:HH:MM:SS
+            until = datetime.datetime.fromtimestamp(sub_renew_unix) - datetime.datetime.now()
+            self.sub_time_remaining = str(until).split(".")[0]
 
     def __str__(self):
         output = ""
@@ -106,10 +107,11 @@ class User:
         output += f"  Voices Used:           {self.voices_used}\n"
         output += "\nSubscription Data:\n"
         output += f"  Tier:                  {self.tier}\n"
-        # convert cents to dollars
-        output += f"  Sub Cost:              ${self.sub_cost / 100:.2f}\n"
-        output += f"  Sub Renewal Date:      {self.sub_renew_date}\n"
-        output += f"  Time Until Renewal:    {self.sub_time_remaining}\n"
+        if self.sub_cost is not None:
+            # convert cents to dollars
+            output += f"  Sub Cost:              ${self.sub_cost / 100:.2f}\n"
+            output += f"  Sub Renewal Date:      {self.sub_renew_date}\n"
+            output += f"  Time Until Renewal:    {self.sub_time_remaining}\n"
         return output
 
 
@@ -128,8 +130,13 @@ def get_user_data():
     if response.status_code == 200:
         # store the data in a User object
         data = response.json()
-        user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], data["next_invoice"]["amount_due_cents"], data["next_invoice"]["next_payment_attempt_unix"])
-        return user
+        try:
+            user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], data["next_invoice"]["amount_due_cents"], data["next_invoice"]["next_payment_attempt_unix"])
+            return user
+        except:
+            # if the above fails, it's because the user doesn't have a subscription
+            user = User(data["tier"], data["character_count"], data["character_limit"], data["can_extend_character_limit"], data["next_character_count_reset_unix"], data["voice_limit"], None, None)
+            return user
 
 
 
