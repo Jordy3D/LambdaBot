@@ -34,7 +34,10 @@ In that `secrets.py`, you will store two tokens:
 
 ### Other Details
 The `secrets.py` file also stores `test_guilds` and `owners`, each in arrays.  
-This is to try and get Slash Commands working, and to define who can generate video or have an uncapped audio generation limit.  
+- `test_guilds` may be required for the /command to appear in the first place, and should be replaced with your server ID
+- `owners` defines who can create video outputs, as well as who can generate results longer than 100 characters
+
+
 
 ## Running
 Once everything is installed and set up properly, double-clicking `main.py` should work.  
