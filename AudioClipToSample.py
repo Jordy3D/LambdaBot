@@ -5,7 +5,9 @@ import random
 folder_path = input("Enter path to clip folder: ")
 
 file_count = 3
-clip_count = 60
+clip_count = 40
+
+audio_formats = ["mp3", "wav", "ogg", "flac", "m4a"]
 
 def generate_file(output_name, folder_path, clip_count):
 
@@ -17,9 +19,12 @@ def generate_file(output_name, folder_path, clip_count):
 
     # loop through all files in folder
     for clip in clips:
-        if clip.endswith(".wav") or clip.endswith(".ogg"):
+        ext = str(clip).split(".")[-1]
+        if ext in audio_formats:
             # add file to list
             clip_list.append(f"{folder_path}/{clip}")
+
+    print(f"Found {len(clip_list)} clips")
 
     all = False
     # get 60 random files from list, with no duplicates
