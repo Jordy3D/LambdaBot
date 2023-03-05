@@ -18,9 +18,10 @@ Originally a Discord bot for generating audio clips using [ElevenLabs' API](http
 #### OpenAI
 - Generate conversational text using [OpenAI's API](https://platform.openai.com/docs/guides/chat)*
 - Generate image using [OpenAI's API](https://platform.openai.com/docs/api-reference/images/create)*  
-    - Preface your message with "give me an image of" followed by your prompt to generate an image
-*Limited to "Owners". 
-*Ping the bot to get a response
+    - Preface your message with "give me an image of" followed by your prompt to generate an image  
+
+**Limited to "Owners"*  
+**Ping the bot to get a response*
     
   
 ### Side features
