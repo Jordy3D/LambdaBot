@@ -23,6 +23,7 @@ from disnake.utils import get
 import secrets # secrets.py stores the API key
 
 import BaneElevenLabs
+import BaneOpenAI
 import DagothVideo
 
 # TODO:
@@ -127,8 +128,35 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_message(message):
+    if message.author.bot:
+        return
+
     if message.author == bot.user:
         return
+    
+    if bot.user.mentioned_in(message):
+        if message.author.id in owners:
+            # if message starts with give me an image of, send an image
+            if "give me an image of" in message.content:
+                prompt = message.content.replace("give me an image of", "")
+                # remove the mention
+                prompt = prompt.replace(f"<@!{bot.user.id}>", "")
+
+                # give ephemeral message
+                temp = await message.channel.send("Generating image...", reference=message, mention_author=None)
+                
+                image = BaneOpenAI.AIImage()
+                image.generate_image(prompt)
+                image.save_images()
+
+                await temp.delete()
+
+                # send image as a reply, with the text "Here's your image!"
+                await message.reply("Here's your image!", file=disnake.File(image.image_path))
+            else:
+                response = BaneOpenAI.generate_chat(message.content)
+                await message.reply(response)
+
 
 # endregion
 

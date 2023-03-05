@@ -157,6 +157,7 @@ logs/
 audio/
 video/
 image/
+images/
 test
 temp.png
 output*.wav
