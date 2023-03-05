@@ -27,7 +27,7 @@ Originally a Discord bot for generating audio clips using [ElevenLabs' API](http
 ### Side features
 - Script for generating sample clips for creating Clone voices
 - [Custom wrapper](https://github.com/Jordy3D/LambdaBot/blob/main/BaneElevenLabs.py) for ElevenLabs' API included because ease of use is fun!
-- [Custom wrapper]() for OpenAI's API, relying on [OpenAI's Python library](https://github.com/openai/openai-python) to streamline the use in the bot
+- [Custom wrapper](https://github.com/Jordy3D/LambdaBot/blob/dev/BaneOpenAI.py) for OpenAI's API, relying on [OpenAI's Python library](https://github.com/openai/openai-python) to streamline the use in the bot
 
 ## Requirements
 1. An [ElevenLabs](https://beta.elevenlabs.io/) account  
