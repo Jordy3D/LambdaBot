@@ -117,7 +117,7 @@ class AIImage:
                         f"URL: {url}")
 
 if __name__ == "__main__":
-    # prompt = "a woman in a short dress is standing on a raft in the middle of the ocean. A large water spirit is guiding the raft."
+    prompt = "a woman in a short dress is standing on a raft in the middle of the ocean. A large water spirit is guiding the raft."
     
     # ai_image = AIImage()
     # ai_image.generate_image(prompt)
