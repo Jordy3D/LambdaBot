@@ -153,12 +153,14 @@ async def on_message(message):
 
                 # send image as a reply, with the text "Here's your image!"
                 await message.reply("Here's your image!", file=disnake.File(image.image_path))
+                log(f"Sent image to {message.author.name}!", "OPENAI", message.guild)
             else:
                 # set the bot to "typing" while it generates a response
                 async with message.channel.typing(): 
                     response = BaneOpenAI.generate_chat(message.content)
                 
                 await message.reply(response)
+                log(f"Sent response to {message.author.name}!", "OPENAI", message.guild)
 
 
 # endregion
