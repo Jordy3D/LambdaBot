@@ -16,9 +16,14 @@ Originally a Discord bot for generating audio clips using [ElevenLabs' API](http
   - Dagoth Ur image included because that's likely something you'd want and/or need
 - Save all generations (images, audio, and video) locally, in case you wanna refer to them again or something
 #### OpenAI
-- Generate conversational text using [OpenAI's API](https://platform.openai.com/docs/guides/chat)*
+- Generate conversational text using [OpenAI's API](https://platform.openai.com/docs/guides/chat)*  
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/19144524/223582585-92302a34-9b61-43f3-9ec4-338e7f0da7bc.png" width="400" alt="Example of OpenAI text generation">  
+  
 - Generate image using [OpenAI's API](https://platform.openai.com/docs/api-reference/images/create)*  
     - Preface your message with "give me an image of" followed by your prompt to generate an image  
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/19144524/223583200-284f142a-9639-4201-9669-a76645c43cba.png" width="400" alt="Example of OpenAI text generation">  
 
 **Limited to "Owners"*  
 **Ping the bot to get a response*
