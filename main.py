@@ -6,6 +6,7 @@
 #    ██████████▄
 #  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█▀
 
+import asyncio
 import os
 import os.path
 import re
@@ -161,6 +162,12 @@ async def on_message(message):
                 
                 await message.reply(response)
                 log(f"Sent response to {message.author.name}!", "OPENAI", message.guild)
+        else:
+            # not implemented yet
+            temp = await message.reply("You don't have the permissions to use this feature!", mention_author=False)
+            log(f"{message.author.name} tried to use a feature they don't have access to!", "SYSTEM", message.guild)
+            await asyncio.sleep(5)
+            await temp.delete()
 
 
 # endregion
