@@ -89,31 +89,6 @@ async def delete_after(seconds, message):
 
 
 
-# region Loops
-
-
-def get_total_members():
-    total_members = 0
-
-    for guild in bot.guilds:
-        total_members += guild.member_count
-    return total_members
-
-@tasks.loop(seconds=300)
-async def update_presence():
-    if member_count != get_total_members():
-        member_count = get_total_members()
-
-        log("Updating presence...", "UPDATE")
-        message = f"over {get_total_members()} users."
-
-        await bot.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching,
-                                                            name=message))
-
-# endregion
-
-
-
 # region ===== Main =====
 
 # set sub tier 
@@ -313,5 +288,33 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
 # endregion
 
 # endregion
+
+
+# region Loops
+
+
+def get_total_members():
+    total_members = 0
+
+    for guild in bot.guilds:
+        total_members += guild.member_count
+    return total_members
+
+@tasks.loop(seconds=300)
+async def update_presence():
+    global member_count
+    if member_count != get_total_members():
+        member_count = get_total_members()
+
+        log("Updating presence...", "UPDATE")
+        message = f"over {get_total_members()} users."
+
+        await bot.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching,
+                                                            name=message))
+
+# endregion
+
+
+
 
 bot.run(secrets.token)
