@@ -81,7 +81,38 @@ def simple_embed(title="", description="", thumbnail="", color=0xFFFFFF, footer=
     embed.set_footer(text=footer)
     return embed
 
+async def delete_after(seconds, message):
+    await asyncio.sleep(seconds)
+    await message.delete()
+
 # endregion
+
+
+
+# region Loops
+
+
+def get_total_members():
+    total_members = 0
+
+    for guild in bot.guilds:
+        total_members += guild.member_count
+    return total_members
+
+@tasks.loop(seconds=300)
+async def update_presence():
+    if member_count != get_total_members():
+        member_count = get_total_members()
+
+        log("Updating presence...", "UPDATE")
+        message = f"over {get_total_members()} users."
+
+        await bot.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching,
+                                                            name=message))
+
+# endregion
+
+
 
 # region ===== Main =====
 
@@ -92,6 +123,8 @@ paid_user = BaneElevenLabs.get_user_data().tier != "free"
 owners = secrets.owners if hasattr(secrets, "owners") else []
 # if test_guilds is not set in secrets.py, set it to an empty list
 test_guilds = secrets.test_guilds if hasattr(secrets, "test_guilds") else []
+
+member_count = 0
 
 # check if secrets.py exists
 if not os.path.exists("secrets.py"):
@@ -117,15 +150,18 @@ bot = commands.Bot(command_prefix=disnake.ext.commands.when_mentioned, owner_ids
 # region Events
 @bot.event
 async def on_ready():
-    log(f"{bot.user.name} is online for {len(bot.users)}!", "SYSTEM")
+    log(f"{bot.user.name} is online for {get_total_members()}!", "SYSTEM")
     await bot.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching,
-                                                        name=f"over {len(bot.users)} users."))
+                                                        name=f"over {get_total_members()} users."))
+    
+    # start any loops
+    update_presence.start()
 
 @bot.event
 async def on_guild_join(guild):
     log(f"Joined {guild.name}!", "SYSTEM")
     await bot.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching,
-                                                        name=f"over {len(bot.users)} users."))
+                                                        name=f"over {get_total_members()} users."))
 
 @bot.event
 async def on_message(message):
@@ -137,37 +173,44 @@ async def on_message(message):
     
     if bot.user.mentioned_in(message):
         if message.author.id in owners:
-            # if message starts with give me an image of, send an image
-            if "give me an image of" in message.content:
-                prompt = message.content.replace("give me an image of", "")
-                # remove the mention
-                prompt = prompt.replace(f"<@!{bot.user.id}>", "")
+            try:
+                # if message starts with give me an image of, send an image
+                if "give me an image of" in message.content:
+                    prompt = message.content.replace("give me an image of", "")
+                    # remove the mention
+                    prompt = prompt.replace(f"<@!{bot.user.id}>", "")
 
-                # give ephemeral message
-                temp = await message.channel.send("Generating image...", reference=message, mention_author=None)
+                    # give ephemeral message
+                    temp = await message.channel.send("Generating image...", reference=message, mention_author=None)
+                    
+                    image = BaneOpenAI.AIImage()
+                    image.generate_image(prompt)
+                    image.save_images()
+
+                    await temp.delete()
+
+                    # send image as a reply, with the text "Here's your image!"
+                    await message.reply("Here's your image!", file=disnake.File(image.image_path))
+                    log(f"Sent image to {message.author.name}!", "OPENAI", message.guild)
+                else:
+                    # set the bot to "typing" while it generates a response
+                    async with message.channel.typing(): 
+                        response = BaneOpenAI.generate_chat(message.content)
+                    
+                    await message.reply(response)
+                    log(f"Sent response to {message.author.name}!", "OPENAI", message.guild)
+            except Exception as e:
+                error(e, message.guild)
+                temp = await message.reply("Something went wrong!", mention_author=False)
                 
-                image = BaneOpenAI.AIImage()
-                image.generate_image(prompt)
-                image.save_images()
-
-                await temp.delete()
-
-                # send image as a reply, with the text "Here's your image!"
-                await message.reply("Here's your image!", file=disnake.File(image.image_path))
-                log(f"Sent image to {message.author.name}!", "OPENAI", message.guild)
-            else:
-                # set the bot to "typing" while it generates a response
-                async with message.channel.typing(): 
-                    response = BaneOpenAI.generate_chat(message.content)
-                
-                await message.reply(response)
-                log(f"Sent response to {message.author.name}!", "OPENAI", message.guild)
+                await delete_after(5, temp)
         else:
             # not implemented yet
             temp = await message.reply("You don't have the permissions to use this feature!", mention_author=False)
             log(f"{message.author.name} tried to use a feature they don't have access to!", "SYSTEM", message.guild)
-            await asyncio.sleep(5)
-            await temp.delete()
+            
+            await delete_after(5, temp)
+        
 
 
 # endregion
@@ -268,16 +311,6 @@ async def dagoth(interaction: disnake.CommandInteraction, message: str, voice: s
 # endregion
 
 # endregion
-
-# endregion
-
-# region Loops
-
-@tasks.loop(seconds=60)
-async def update_presence():
-    log("Updating presence...", "UPDATE")
-    await bot.change_presence(activity=disnake.Activity(type=disnake.ActivityType.watching,
-                                                        name=f"over {len(bot.users)} users."))
 
 # endregion
 

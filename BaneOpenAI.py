@@ -73,7 +73,7 @@ def generate_chat(prompt, model="gpt-3.5-turbo"):
     response = openai.ChatCompletion.create(
         model=model,
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=1500,
+        max_tokens=1800,
     )
         
     return response["choices"][0]["message"]["content"]
