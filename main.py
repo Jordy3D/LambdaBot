@@ -149,43 +149,65 @@ async def on_message(message):
     if bot.user.mentioned_in(message):
         if message.author.id in owners:
             try:
-                # if message starts with give me an image of, send an image
-                if "give me an image of" in message.content:
-                    prompt = message.content.replace("give me an image of", "")
-                    # remove the mention
-                    prompt = prompt.replace(f"<@!{bot.user.id}>", "")
-
-                    # give ephemeral message
-                    temp = await message.channel.send("Generating image...", reference=message, mention_author=None)
-                    
-                    image = BaneOpenAI.AIImage()
-                    image.generate_image(prompt)
-                    image.save_images()
-
-                    await temp.delete()
-
-                    # send image as a reply, with the text "Here's your image!"
-                    await message.reply("Here's your image!", file=disnake.File(image.image_path))
-                    log(f"Sent image to {message.author.name}!", "OPENAI", message.guild)
-                else:
-                    # set the bot to "typing" while it generates a response
-                    async with message.channel.typing(): 
-                        response = BaneOpenAI.generate_chat(message.content)
-                    
-                    await message.reply(response)
-                    log(f"Sent response to {message.author.name}!", "OPENAI", message.guild)
+                await openai(message)
             except Exception as e:
-                error(e, message.guild)
-                temp = await message.reply("Something went wrong!", mention_author=False)
-                
-                await delete_after(5, temp)
+                message.reply(f"Error: {e}")
         else:
-            # not implemented yet
             temp = await message.reply("You don't have the permissions to use this feature!", mention_author=False)
             log(f"{message.author.name} tried to use a feature they don't have access to!", "SYSTEM", message.guild)
             
             await delete_after(5, temp)
+                
         
+
+async def openai(message):
+    try:
+        # if message starts with give me an image of, send an image
+        if "give me an image of" in message.content:
+            prompt = message.content.replace("give me an image of", "")
+            # remove the mention
+            prompt = prompt.replace(f"<@!{bot.user.id}>", "")
+
+            # give ephemeral message
+            temp = await message.channel.send("Generating image...", reference=message, mention_author=None)
+            
+            image = BaneOpenAI.AIImage()
+            try:
+                image.generate_image(prompt)
+            except:
+                await temp.edit(content="Something went wrong!")
+                error(f"Something went wrong while generating an image for {message.author.name}! Prompt: {prompt}", message.guild)
+                return
+                
+            image.save_images()
+
+            await temp.delete()
+
+            # send image as a reply, with the text "Here's your image!"
+            await message.reply("Here's your image!", file=disnake.File(image.image_path))
+            log(f"Sent image to {message.author.name}!", "OPENAI", message.guild)
+        else:
+            # set the bot to "typing" while it generates a response
+            async with message.channel.typing(): 
+                try:
+                    response = BaneOpenAI.generate_chat(message.content)
+                except:
+                    response = "Something went wrong!"
+            
+            await message.reply(response)
+            
+            if response == "Something went wrong!":
+                error(f"Something went wrong while generating a response for {message.author.name}! Prompt: {message.content}", message.guild)
+            else:
+                log(f"Sent response to {message.author.name}!", "OPENAI", message.guild)
+                
+    except Exception as e:
+        error(e, message.guild)
+        temp = await message.reply("Something went wrong!", mention_author=False)
+        
+        await delete_after(5, temp)
+
+
 
 
 # endregion

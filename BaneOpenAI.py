@@ -91,8 +91,13 @@ class AIImage:
         self.image_path = ""
 
     def generate_image(self, prompt, num_images=1, size="medium", api_key=secrets.openaikey):
-        response = openai.Image.create(prompt=prompt, n=num_images, size=sizes[size], api_key=api_key)
-        
+        response = openai.Image.create(
+            prompt=prompt, 
+            n=num_images, 
+            size=sizes[size], 
+            api_key=api_key,
+        )
+              
         self.created = response["created"]
         self.prompt = prompt
         self.urls = [image["url"] for image in response["data"]]
@@ -118,10 +123,14 @@ class AIImage:
                         f"URL: {url}")
 
 if __name__ == "__main__":
-    prompt = "a woman in a short dress is standing on a raft in the middle of the ocean. A large water spirit is guiding the raft."
+    prompt = "a crab with lightning powers"
     
-    # ai_image = AIImage()
-    # ai_image.generate_image(prompt)
+    ai_image = AIImage()
+    try:
+        ai_image.generate_image(prompt)
+    except:
+        print("Image generation failed")
+        
     # ai_image.download_images()
 
     # models = get_models()
