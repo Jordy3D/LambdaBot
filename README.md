@@ -68,9 +68,13 @@ Once everything is installed and set up properly, double-clicking `main.py` shou
 If it brings up a "no program to run this" message, you can Browse for Python from there and then say "always use this program".
 
 ## Notes
-While the AI is pretty good, sometimes it can mispronounce things.  
+- While the AI is pretty good, sometimes it can mispronounce things.  
 Purposely using different words may become necessary to get the result you expect.  
 I'll add to the following table with words I come across that you may want to try.
+
 | Original | Replacement |
 | :-- | :-- |
 | colonel | kernel|
+
+- Due to the way the bot is set up, slash commands will not appear and/or will not work if the bot if the server is not in the `test_guilds` list. If someone knows how to fix this, please let me know.  
+- The bot's "typing" message may not remain visible for the duration of the generation. It is still generating, it just doesn't show it. I'm not sure how to fix this either.

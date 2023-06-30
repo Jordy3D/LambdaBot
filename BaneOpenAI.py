@@ -6,6 +6,11 @@ import openai
 import secrets
 openai.api_key = secrets.openaikey
 
+
+####################
+# OpenAI API calls #
+####################
+
 # no API access for account information yet, here's the URL instead 
 # https://platform.openai.com/account/usage
 
@@ -122,14 +127,48 @@ class AIImage:
                         f"Created: {self.created}\n"\
                         f"URL: {url}")
 
+
+###################
+# Other functions #
+###################
+
+show_words = [
+    "give",
+    "give me",
+    "show",
+    "show me",
+    "display",
+    "bring up",
+]
+
+picture_words = [
+    "picture",
+    "image",
+    "photo",
+    "pic",
+    "drawing",
+    "painting",
+]
+
+def ask_for_image(message):
+    message = message.lower()
+
+    if any(word in message[:len(message)//4] for word in show_words) and any(word in message for word in picture_words):
+        return True
+    else:
+        return False
+
+
+
+
 if __name__ == "__main__":
     prompt = "a crab with lightning powers"
     
-    ai_image = AIImage()
-    try:
-        ai_image.generate_image(prompt)
-    except:
-        print("Image generation failed")
+    # ai_image = AIImage()
+    # try:
+    #     ai_image.generate_image(prompt)
+    # except:
+    #     print("Image generation failed")
         
     # ai_image.download_images()
 
@@ -146,3 +185,8 @@ if __name__ == "__main__":
     # prompt = "Hello, how are you?"
     # response = generate_chat(prompt)
     # print(response)
+
+    print(ask_for_image("what is a phrase that would show me a picture?"))
+    print(ask_for_image("Show me a picture of a dog"))
+    print(ask_for_image("What is a show about pictures of dogs?"))
+    print(ask_for_image("give me a picture of a rabbit"))
