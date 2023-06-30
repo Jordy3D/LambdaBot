@@ -157,7 +157,11 @@ logs/
 audio/
 video/
 image/
+images/
 test
 temp.png
 output*.wav
 sample*.wav
+reminders/reminders.json
+test.py
+lambda_settings/*/

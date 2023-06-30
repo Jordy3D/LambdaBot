@@ -1,0 +1,12 @@
+{
+    "XI_use_only_cloned_voices": true,
+    "XI_allow_all_audio": false,
+    "XI_allow_all_video": false,
+    "OAI_allow_all_chat": false,
+    "OAI_allow_all_dalle": false,
+    "XI_allowed_roles_audio": [],
+    "XI_allowed_roles_video": [],
+    "OAI_allowed_roles_chat": [],
+    "OAI_allowed_roles_dalle": [],
+    "OAI_image_size": "medium"
+}
