@@ -204,6 +204,9 @@ async def remindme(ctx, time, *, message):
 @tasks.loop(seconds=5)
 async def check_reminders():
     reminders = BaneRemind.get_reminders()
+    if reminders == None or len(reminders) == 0:
+        return
+
     for reminder in reminders:
         if reminder["time"] < datetime.datetime.now().timestamp():
             # dm user
