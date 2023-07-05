@@ -25,7 +25,7 @@ def get_reminders():
             reminders = json.load(f)
             return reminders
     except FileNotFoundError:
-        return None
+        return []
     
 def save_reminders(reminders):
     if not os.path.exists('reminders'):
