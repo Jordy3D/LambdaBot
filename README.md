@@ -78,3 +78,7 @@ I'll add to the following table with words I come across that you may want to tr
 
 - Due to the way the bot is set up, slash commands will not appear and/or will not work if the bot if the server is not in the `test_guilds` list. If someone knows how to fix this, please let me know.  
 - The bot's "typing" message may not remain visible for the duration of the generation. It is still generating, it just doesn't show it. I'm not sure how to fix this either.
+
+## Warning
+I ain't gonna be able to help too much if things don't install correctly.  
+My Python install seems to have wigged out, so things like "requirements" and "correct versions" aren't entirely clear to me.  
